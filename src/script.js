@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import * as dat from 'lil-gui'
@@ -7,6 +8,7 @@ import Stats from 'stats.js'
 
 // Concept adapted from @kandabi via https://github.com/kandabi/threejs-impossibox
 import { ImpossibleBox } from './content/impossible-box'
+
 
 /**
  * Stats
@@ -28,12 +30,17 @@ const gui = new dat.GUI()
 const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene()
 
-
 /**
  * Textures
  */
 const textureLoader = new THREE.TextureLoader()
-const matcapTexture = textureLoader.load('textures/matcaps/8.png')
+const rgbeLoader = new RGBELoader()
+
+rgbeLoader.load('/textures/environmentMaps/space_sunset.hdr', (environmentMap) => {
+    environmentMap.mapping = THREE.EquirectangularReflectionMapping
+    scene.background = environmentMap
+    scene.environment = environmentMap
+})
 
 
 /**
@@ -120,26 +127,19 @@ gltfLoader.load('/models/box_frame.glb', (gltf) => {
 })
 
 
+gltfLoader.load('/models/scene.glb', (gltf) => {
+    gltf.scene.scale.set(2.0, 2.0, 2.0)
+    gltf.scene.position.set(0, -6.0, 0)
+    gltf.scene.receiveShadow = true;
+    scene.add(gltf.scene)
+})
+
+
 /**
  * Impossible Box
  */
 const impossibleBox = new ImpossibleBox(scene);
 impossibleBox.create();
-
-const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(120, 120, 1, 1),
-    new THREE.MeshStandardMaterial({
-    color: new THREE.Color(0xa6a6a6),
-    depthWrite: false,
-    })
-);
-
-floor.receiveShadow = true;
-floor.rotation.x = -Math.PI * 0.5;
-floor.position.y = -7;
-
-scene.add(floor);
-
 
 
 /**

@@ -26,8 +26,12 @@ import {
     Vector3,
  } from 'three';
  
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+
  import boxTexture from '../../static/textures/pannelTexture.png';
  import { Portal } from './portal';
+
  
  class ImpossibleBox {
     constructor(scene) {
@@ -72,8 +76,19 @@ import {
     }
  
     createPortals() {
-        const backgroundGeometrySphere = new SphereGeometry(12, 24, 24);
-        const backgroundGeometry = new BoxGeometry(8, 8, 8);
+      const dracoLoader = new DRACOLoader();
+      dracoLoader.setDecoderPath( '/draco/');
+      dracoLoader.preload();
+
+      const gltfLoader = new GLTFLoader();
+      gltfLoader.setDRACOLoader(dracoLoader);
+
+
+      const bakedMaterial = new MeshBasicMaterial({ color: 0xffffff})
+
+      
+      const backgroundGeometry = new BoxGeometry(8, 8, 8);
+      const backgroundGeometrySphere = new SphereGeometry(8, 32, 32);
 
       //*** Create backgrounds */
       const background_0 = new Mesh(
@@ -131,13 +146,25 @@ import {
       );
 
       //*** Create objects */
+
+      const portalScene = new Scene()
+      gltfLoader.load('/models/portal.glb', (gltf) => {
+         gltf.scene.traverse((child) => {
+             child.material = bakedMaterial
+         })
+         portalScene.add(gltf.scene)
+      })
+
+
       this.meshes.push(
          new Mesh(
-            new BoxGeometry(3, 3, 3),
+            new TorusGeometry(1.5, 1, 6, 6),
             new MeshStandardMaterial({
-               color: new Color(0xff003c),
+               color: new Color(0xfc68f7),
+               flatShading: true,
             })
          )
+
       );
 
       this.meshes.push(
