@@ -7,7 +7,7 @@ import * as dat from 'lil-gui'
 import Stats from 'stats.js'
 
 // Concept adapted from @kandabi via https://github.com/kandabi/threejs-impossibox
-import { ImpossibleBox } from './content/impossible-box'
+import { ImpossibleBox } from './Experience/impossible-box'
 
 
 /**
