@@ -93,7 +93,7 @@ export default class Environment
         this.environmentMap = {}
         this.environmentMap.intensity = 0.8
         this.environmentMap.mapping = THREE.EquirectangularReflectionMapping
-        this.environmentMap.texture = this.resources.items.spaceSunsetEnvironmentMapHDR
+        this.environmentMap.texture = this.resources.items.spaceSunsetEnvironmentMap
         //this.environmentMap.texture.colorSpace = THREE.SRGBColorSpace
         
         this.scene.environment = this.environmentMap.texture

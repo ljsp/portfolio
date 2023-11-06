@@ -11,12 +11,16 @@ const stencilConfig = {
 let stencilId = 1;
 
 class Portal {
-    constructor(portalSize) 
+    constructor(portalHeight, portalWidth) 
     {
-        this.geometry = new THREE.PlaneGeometry(portalSize, portalSize);
+        this.portalHeight = portalHeight
+        this.portalWidth = portalWidth
     }
 
-    create({ portal, background, scene }) {
+    create({background, scene, portal }) {
+
+        this.geometry = new THREE.PlaneGeometry(this.portalWidth, this.portalHeight);
+
         const portalGroup = new THREE.Group();
         const hiddenGroup = new THREE.Group();
         stencilId++;
@@ -37,15 +41,23 @@ class Portal {
             portalMesh.rotation.setFromVector3(portal.rotation);
         }
 
+        if (portal.debugColor) {
+            portalMesh.material.color = portal.debugColor;
+            portalMesh.material.colorWrite = true;
+            portalMesh.material.depthWrite = true;
+            portalMesh.material.stencilWrite = false;
+            portalMesh.material.transparent = true;
+            portalMesh.material.opacity = 0.5;
+        }
 
-        const material = background.material;
-        material.stencilFuncMask = stencilConfig.stencilFuncMask;
-        material.stencilWrite = stencilConfig.stencilWrite;
-        material.stencilZPass = stencilConfig.stencilZPass;
-        material.stencilZFail = stencilConfig.stencilZFail;
-        material.stencilFail = stencilConfig.stencilFail;
-        material.stencilFunc = THREE.EqualStencilFunc;
-        material.stencilRef = stencilId;
+        const backgroundMaterial = background.material;
+        backgroundMaterial.stencilFuncMask = stencilConfig.stencilFuncMask;
+        backgroundMaterial.stencilWrite = stencilConfig.stencilWrite;
+        backgroundMaterial.stencilZPass = stencilConfig.stencilZPass;
+        backgroundMaterial.stencilZFail = stencilConfig.stencilZFail;
+        backgroundMaterial.stencilFail = stencilConfig.stencilFail;
+        backgroundMaterial.stencilFunc = THREE.EqualStencilFunc;
+        backgroundMaterial.stencilRef = stencilId;
         hiddenGroup.renderOrder = stencilId;
         hiddenGroup.add(background);
 

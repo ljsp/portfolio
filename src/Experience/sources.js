@@ -33,7 +33,7 @@ export default [
         path: 'models/boxFrame/box_frame.glb'
     },
     {
-        name: 'portalScene',
+        name: 'portalSceneModel',
         type: 'gltfModel',
         path: 'models/portalScene/portal.glb'
     },
