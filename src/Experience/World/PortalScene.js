@@ -49,7 +49,7 @@ export default class PortalScene
 
         this.model.traverse((child) =>
         {
-            if(child instanceof THREE.Mesh)
+            if(child.isMesh)
             {
                 child.scale.set(4, 4, 4)
                 child.position.set(0, -4, 0)

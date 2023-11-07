@@ -16,7 +16,6 @@ export default class World
             // Setup
             this.impossibleBox = new ImpossibleBox()
             this.environment = new Environment()
-
         })
     }
 

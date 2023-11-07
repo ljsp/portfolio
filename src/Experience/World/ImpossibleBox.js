@@ -26,7 +26,7 @@ export default class ImpossibleBox
       // Debug
       if(this.debug.active)
       {
-         this.debugFolder = this.debug.ui.addFolder('ImpossibleBox')
+         this.debugFolder = this.debug.ui.addFolder('ImpossibleBox')      
       }
 
       // Resources
@@ -35,7 +35,7 @@ export default class ImpossibleBox
       this.spaceShip = new SpaceShip()
       this.portalScene = new PortalScene()
 
-      this.createBoxFrame()
+      //this.createBoxFrame()
       this.createPortals()
 
       this.scene.add(this.group)
@@ -65,7 +65,7 @@ export default class ImpossibleBox
             scene: this.room.model,
             portal: {
                position: new THREE.Vector3(0, -2., 4),
-               debugColor: new THREE.Color('#0000ff'),
+               //debugColor: new THREE.Color('#0000ff'),
             }
          })
       )
@@ -78,7 +78,7 @@ export default class ImpossibleBox
             portal: {
                position: new THREE.Vector3(4.0, -2., 0),
                rotation: new THREE.Vector3(0, Math.PI * 0.5, 0),
-               debugColor: new THREE.Color('#00ff00'),
+               //debugColor: new THREE.Color('#00ff00'),
             }
          })
       )
@@ -106,6 +106,7 @@ export default class ImpossibleBox
          })
       )
 
+      /*
       this.group.add(
          this.squarePortal.create({
             background: this.room.background,
@@ -119,7 +120,7 @@ export default class ImpossibleBox
             }
          })
       )
-      
+      */
    }
 }
  

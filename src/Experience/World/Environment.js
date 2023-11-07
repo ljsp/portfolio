@@ -17,7 +17,8 @@ export default class Environment
         }
 
         this.setSunLight()
-        this.setEnvironmentMap()
+        this.setEnvironment()
+        //this.setEnvironmentMap()
     }
 
     setSunLight()
@@ -86,6 +87,49 @@ export default class Environment
                 .step(0.001)
         }
         */
+    }
+
+    setEnvironment()
+    {
+
+        const plane = new THREE.Mesh(
+            new THREE.PlaneGeometry(100, 100),
+            new THREE.MeshBasicMaterial({ 
+                color: 0x171616,
+                stencilFuncMask: 0xff,
+                stencilWrite: true,
+                stencilFunc: THREE.EqualStencilFunc,
+                stencilZPass: THREE.KeepStencilOp,
+                stencilZFail: THREE.KeepStencilOp,
+                stencilFail: THREE.KeepStencilOp,
+                stencilRef: 0
+            })
+        )
+        plane.rotation.x = - Math.PI * 0.5
+        plane.position.y = - 4.11
+        this.scene.add(plane)
+
+
+        const base = this.resources.items.scene.scene
+        base.traverse((child) => {
+            if (child.isMesh) {
+                const mesh = child.clone();
+                mesh.material = mesh.material.clone();
+                mesh.material.stencilFuncMask = 0xff;
+                mesh.material.stencilWrite = true
+                mesh.material.stencilFunc = THREE.EqualStencilFunc
+                mesh.material.stencilZPass = THREE.KeepStencilOp
+                mesh.material.stencilZFail = THREE.KeepStencilOp
+                mesh.material.stencilFail = THREE.KeepStencilOp
+                mesh.material.stencilRef = 0
+                mesh.scale.x *= 2
+                mesh.scale.y *= 2
+                mesh.scale.z *= 2
+                mesh.position.y = - 4.5
+                console.log(mesh)
+                this.scene.add(mesh);
+            }
+        })
     }
 
     setEnvironmentMap()
