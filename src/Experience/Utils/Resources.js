@@ -30,6 +30,7 @@ export default class Resources extends EventEmitter
         this.loaders.textureLoader = new THREE.TextureLoader()
         this.loaders.cubeTextureLoader = new THREE.CubeTextureLoader()
         this.loaders.rgbeLoader = new RGBELoader()
+        this.loaders.fileLoader = new THREE.FileLoader()
     }
 
     startLoading()
@@ -70,6 +71,16 @@ export default class Resources extends EventEmitter
             else if(source.type === 'hdrTexture')
             {
                 this.loaders.rgbeLoader.load(
+                    source.path,
+                    (file) =>
+                    {
+                        this.sourceLoaded(source, file)
+                    }
+                )
+            }
+            else if(source.type === 'shader')
+            {
+                this.loaders.fileLoader.load(
                     source.path,
                     (file) =>
                     {

@@ -10,6 +10,10 @@ export default class Environment
         this.resources = this.experience.resources
         this.debug = this.experience.debug
         
+        this.SKY_COLOR = 0x999999
+        this.GROUND_COLOR = 0x242424
+        this.SKY_SIZE = 50
+
         // Debug
         if(this.debug.active)
         {
@@ -18,6 +22,7 @@ export default class Environment
 
         this.setSunLight()
         this.setEnvironment()
+        this.addSkyGradient()
         //this.setEnvironmentMap()
     }
 
@@ -91,7 +96,6 @@ export default class Environment
 
     setEnvironment()
     {
-
         const plane = new THREE.Mesh(
             new THREE.PlaneGeometry(100, 100),
             new THREE.MeshBasicMaterial({ 
@@ -106,7 +110,7 @@ export default class Environment
             })
         )
         plane.rotation.x = - Math.PI * 0.5
-        plane.position.y = - 4.11
+        plane.position.y = - 4.9
         this.scene.add(plane)
 
 
@@ -125,8 +129,7 @@ export default class Environment
                 mesh.scale.x *= 2
                 mesh.scale.y *= 2
                 mesh.scale.z *= 2
-                mesh.position.y = - 4.5
-                console.log(mesh)
+                mesh.position.y = - 5.1
                 this.scene.add(mesh);
             }
         })
@@ -138,7 +141,6 @@ export default class Environment
         this.environmentMap.intensity = 0.8
         this.environmentMap.mapping = THREE.EquirectangularReflectionMapping
         this.environmentMap.texture = this.resources.items.spaceSunsetEnvironmentMap
-        //this.environmentMap.texture.colorSpace = THREE.SRGBColorSpace
         
         this.scene.environment = this.environmentMap.texture
         this.scene.background = this.environmentMap.texture
@@ -168,5 +170,27 @@ export default class Environment
                 .step(0.001)
                 .onChange(this.environmentMap.updateMaterials)
         }
+
+    }
+
+    addSkyGradient() {
+
+        const vertexShader = this.resources.items.gradientVertexShader
+        const fragmentShader = this.resources.items.gradientFragmentShader
+
+        const uniforms = {
+            topColor: { value: new THREE.Color(this.SKY_COLOR) },
+            bottomColor: { value: new THREE.Color(this.GROUND_COLOR) }
+        }
+        const skyGeo = new THREE.SphereGeometry(this.SKY_SIZE, 32, 15)
+        const skyMat = new THREE.ShaderMaterial({
+            uniforms,
+            vertexShader,
+            fragmentShader,
+            side: THREE.BackSide
+        })
+
+        const sky = new THREE.Mesh(skyGeo, skyMat)
+        this.scene.add(sky)
     }
 }

@@ -23,6 +23,16 @@ export default [
         path: 'textures/cubeFace/faceTextureBorder.png'
     },
     {
+        name: 'gradientVertexShader',
+        type: 'shader',
+        path: 'shaders/gradient.vert'
+    },
+    {
+        name: 'gradientFragmentShader',
+        type: 'shader',
+        path: 'shaders/gradient.frag'
+    },
+    {
         name: 'scene',
         type: 'gltfModel',
         path: 'models/scene/scene.glb'

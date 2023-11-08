@@ -42,18 +42,15 @@ export default class BedRoom
     setModel() 
     {
         this.model = this.resource.scene
-        this.model.scale.set(0.02, 0.02, 0.02)
-        this.model.position.set(0., -4., -0.5)
-
-        /*this.backedTexture = this.resources.items.portalTexture
-        this.backedTexture.flipY = false
 
         this.model.traverse((child) =>
         {
-            if(child instanceof THREE.Mesh)
+            if(child.isMesh)
             {
-                child.material.map = this.backedTexture
+                child.scale.set(1, 1, 1)
+                child.position.set(0, -4, 0)
+                child.rotation.set(0, Math.PI, 0)
             }
-        })*/
+        })
     }
 }

@@ -25,7 +25,7 @@ export default class SpaceShip
 
     setBackground() 
     {
-        const backgroundGeometrySphere = new THREE.SphereGeometry(8, 32, 32);
+        const backgroundGeometrySphere = new THREE.SphereGeometry(16, 32, 32);
         const backgroundMaterial = new THREE.MeshStandardMaterial({
             side: THREE.BackSide,
             color: new THREE.Color(0xf5fa6e),
@@ -42,5 +42,15 @@ export default class SpaceShip
     setModel() 
     {
         this.model = this.resource.scene
+
+        this.model.traverse((child) =>
+        {
+            if(child.isMesh)
+            {
+                child.position.x += 30
+                child.position.y -= 30
+                child.position.z += 30
+            }
+        })
     }
 }
