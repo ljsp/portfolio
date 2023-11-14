@@ -55,7 +55,7 @@ export default [
     {
         name: 'bedRoomModel',
         type: 'gltfModel',
-        path: 'models/bedroom/bedroom.glb'
+        path: 'models/bedroom/bedroom_basic.glb'
     },
     {
         name: 'kitchenModel',

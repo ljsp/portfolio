@@ -1,7 +1,6 @@
 import * as THREE from 'three'
 import { Portal } from '../Utils/Portal.js'
 import Experience from '../Experience.js'
-import BedRoom from './BedRoom.js'
 import Kitchen from './Kitchen.js'
 import SpaceShip from './SpaceShip.js'
 import PortalScene from './PortalScene.js'
@@ -30,7 +29,6 @@ export default class ImpossibleBox
       }
 
       // Resources
-      this.room = new BedRoom()
       this.kitchen = new Kitchen()
       this.spaceShip = new SpaceShip()
       this.portalScene = new PortalScene()
@@ -61,8 +59,8 @@ export default class ImpossibleBox
 
       this.group.add(
          this.rectanglePortal.create({
-            background: this.room.background, 
-            scene: this.room.model,
+            background: this.spaceShip.background, 
+            scene: this.spaceShip.model,
             portal: {
                position: new THREE.Vector3(0, -2., 4),
                //debugColor: new THREE.Color('#0000ff'),

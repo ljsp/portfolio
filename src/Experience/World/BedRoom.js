@@ -18,38 +18,30 @@ export default class BedRoom
 
         // Resource
         this.resource = this.resources.items.bedRoomModel
-        
-        this.setBackground()
+
         this.setModel()
-    }
-
-    setBackground() 
-    {
-        const backgroundGeometrySphere = new THREE.SphereGeometry(8, 32, 32);
-        const backgroundMaterial = new THREE.MeshStandardMaterial({
-            side: THREE.BackSide,
-            color: new THREE.Color(0x8ff2bf),
-            flatShading: true,
-            envMap: this.resources.items.spaceSunsetEnvironmentMap,
-        });
-
-        this.background = new THREE.Mesh(
-            backgroundGeometrySphere,
-            backgroundMaterial
-        );
     }
 
     setModel() 
     {
         this.model = this.resource.scene
+        this.model.scale.set(2.0, 2.0, 2.0)
+        this.model.rotation.set(0, - Math.PI / 2, 0)
+        this.scene.add(this.model)
 
         this.model.traverse((child) =>
         {
-            if(child.isMesh)
+            if(child instanceof THREE.Mesh)
             {
-                child.scale.set(1, 1, 1)
-                child.position.set(0, -4, 0)
-                child.rotation.set(0, Math.PI, 0)
+                let newMaterial = child.material.clone()
+                newMaterial.stencilFuncMask = 0xff;
+                newMaterial.stencilWrite = true
+                newMaterial.stencilFunc = THREE.EqualStencilFunc
+                newMaterial.stencilZPass = THREE.KeepStencilOp
+                newMaterial.stencilZFail = THREE.KeepStencilOp
+                newMaterial.stencilFail = THREE.KeepStencilOp
+                newMaterial.stencilRef = 0
+                child.material = newMaterial
             }
         })
     }

@@ -1,6 +1,7 @@
 import Experience from '../Experience.js'
 import Environment from './Environment.js'
 import ImpossibleBox from './ImpossibleBox.js'
+import BedRoom from './BedRoom.js'
 
 export default class World
 {
@@ -15,6 +16,7 @@ export default class World
         {
             // Setup
             this.impossibleBox = new ImpossibleBox()
+            this.room = new BedRoom()
             this.environment = new Environment()
         })
     }

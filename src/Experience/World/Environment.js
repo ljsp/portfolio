@@ -21,7 +21,8 @@ export default class Environment
         }
 
         this.setSunLight()
-        this.setEnvironment()
+        this.setPlane()
+        this.setBase()
         this.addSkyGradient()
         //this.setEnvironmentMap()
     }
@@ -94,7 +95,7 @@ export default class Environment
         */
     }
 
-    setEnvironment()
+    setPlane() 
     {
         const plane = new THREE.Mesh(
             new THREE.PlaneGeometry(100, 100),
@@ -110,27 +111,30 @@ export default class Environment
             })
         )
         plane.rotation.x = - Math.PI * 0.5
-        plane.position.y = - 4.9
+        plane.position.y = - 6.5
         this.scene.add(plane)
+    }
 
-
+    setBase()
+    {
         const base = this.resources.items.scene.scene
-        base.traverse((child) => {
-            if (child.isMesh) {
-                const mesh = child.clone();
-                mesh.material = mesh.material.clone();
-                mesh.material.stencilFuncMask = 0xff;
-                mesh.material.stencilWrite = true
-                mesh.material.stencilFunc = THREE.EqualStencilFunc
-                mesh.material.stencilZPass = THREE.KeepStencilOp
-                mesh.material.stencilZFail = THREE.KeepStencilOp
-                mesh.material.stencilFail = THREE.KeepStencilOp
-                mesh.material.stencilRef = 0
-                mesh.scale.x *= 2
-                mesh.scale.y *= 2
-                mesh.scale.z *= 2
-                mesh.position.y = - 5.1
-                this.scene.add(mesh);
+        base.scale.set(2.0, 2.0, 2.0)
+        base.position.set(0, - 6, 0)
+        this.scene.add(base)
+
+        base.traverse((child) =>
+        {
+            if(child instanceof THREE.Mesh)
+            {
+                let newMaterial = child.material.clone()
+                newMaterial.stencilFuncMask = 0xff;
+                newMaterial.stencilWrite = true
+                newMaterial.stencilFunc = THREE.EqualStencilFunc
+                newMaterial.stencilZPass = THREE.KeepStencilOp
+                newMaterial.stencilZFail = THREE.KeepStencilOp
+                newMaterial.stencilFail = THREE.KeepStencilOp
+                newMaterial.stencilRef = 0
+                child.material = newMaterial
             }
         })
     }
