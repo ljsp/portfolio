@@ -17,7 +17,7 @@ class Portal {
         this.portalWidth = portalWidth
     }
 
-    create({background, scene, portal }) {
+    create({background, portal }) {
 
         this.geometry = new THREE.PlaneGeometry(this.portalWidth, this.portalHeight);
 
@@ -60,21 +60,6 @@ class Portal {
         backgroundMaterial.stencilRef = stencilId;
         hiddenGroup.renderOrder = stencilId;
         hiddenGroup.add(background);
-
-        scene.traverse((child) => {
-            if (child.isMesh) {
-                const mesh = child.clone();
-                mesh.material = mesh.material.clone();
-                mesh.material.stencilFuncMask = stencilConfig.stencilFuncMask;
-                mesh.material.stencilWrite = stencilConfig.stencilWrite;
-                mesh.material.stencilZPass = stencilConfig.stencilZPass;
-                mesh.material.stencilZFail = stencilConfig.stencilZFail;
-                mesh.material.stencilFail = stencilConfig.stencilFail;
-                mesh.material.stencilFunc = THREE.EqualStencilFunc;
-                mesh.material.stencilRef = stencilId;
-                hiddenGroup.add(mesh);
-            }
-        })
 
         portalGroup.add(portalMesh);
         portalGroup.add(hiddenGroup);

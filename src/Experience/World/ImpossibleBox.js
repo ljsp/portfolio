@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { Portal } from '../Utils/Portal.js'
 import Experience from '../Experience.js'
 import Kitchen from './Kitchen.js'
-import SpaceShip from './SpaceShip.js'
+import Workshop from './Workshop.js'
 import PortalScene from './PortalScene.js'
 
  
@@ -17,6 +17,7 @@ export default class ImpossibleBox
       this.time = this.experience.time
       this.debug = this.experience.debug
       
+      this.backgrounds = []
       this.group = new THREE.Group()
       this.squarePortal = new Portal(8,8)
       this.rectanglePortal = new Portal(4,8)
@@ -28,13 +29,14 @@ export default class ImpossibleBox
          this.debugFolder = this.debug.ui.addFolder('ImpossibleBox')      
       }
 
+      this.createPortals()
+
       // Resources
       this.kitchen = new Kitchen()
-      this.spaceShip = new SpaceShip()
+      this.workshop = new Workshop()
       this.portalScene = new PortalScene()
 
       //this.createBoxFrame()
-      this.createPortals()
 
       this.scene.add(this.group)
 
@@ -54,13 +56,27 @@ export default class ImpossibleBox
       this.boxFrame.position.set(0, -4, 0)
       this.scene.add(this.boxFrame)
    }
- 
+
+
    createPortals() {
+
+      // Workshop Background
+      const backgroundGeometrySphere = new THREE.SphereGeometry(16, 32, 32);
+        const backgroundMaterial = new THREE.MeshStandardMaterial({
+            side: THREE.BackSide,
+            color: new THREE.Color(0xf5fa6e),
+            flatShading: true,
+            envMap: this.resources.items.spaceSunsetEnvironmentMap,
+        });
+
+        const workshopBackground = new THREE.Mesh(
+            backgroundGeometrySphere,
+            backgroundMaterial
+        );
 
       this.group.add(
          this.rectanglePortal.create({
-            background: this.spaceShip.background, 
-            scene: this.spaceShip.model,
+            background: workshopBackground, 
             portal: {
                position: new THREE.Vector3(0, -2., 4),
                //debugColor: new THREE.Color('#0000ff'),
@@ -68,11 +84,23 @@ export default class ImpossibleBox
          })
       )
 
+      // Kitchen Background
+      const backgroundGeometrySphere2 = new THREE.SphereGeometry(8, 32, 32);
+      const backgroundMaterial2 = new THREE.MeshStandardMaterial({
+          side: THREE.BackSide,
+          color: new THREE.Color(0xf5fa6e),
+          flatShading: true,
+          envMap: this.resources.items.spaceSunsetEnvironmentMap,
+      });
+
+      const kitchenBackground = new THREE.Mesh(
+          backgroundGeometrySphere2,
+          backgroundMaterial2
+      );
       
       this.group.add(
          this.rectanglePortal.create({
-            background: this.kitchen.background,
-            scene: this.kitchen.model,
+            background: kitchenBackground,
             portal: {
                position: new THREE.Vector3(4.0, -2., 0),
                rotation: new THREE.Vector3(0, Math.PI * 0.5, 0),
@@ -81,11 +109,10 @@ export default class ImpossibleBox
          })
       )
       
-
+      // Undefined Scene Background
       this.group.add(
          this.squarePortal.create({
-            background: this.spaceShip.background,
-            scene: this.spaceShip.model,
+            background: workshopBackground,
             portal: {
                position: new THREE.Vector3(-4, 0, 0),
                rotation: new THREE.Vector3(0, Math.PI * -0.5, 0),
@@ -93,32 +120,27 @@ export default class ImpossibleBox
          })
       )
 
+      // Portal Scene Background
+      const environmentMap = this.resources.items.spaceSunsetEnvironmentMapHDR
+
+      const sphere = new THREE.Mesh(
+          new THREE.SphereGeometry(30, 32, 32),
+          new THREE.MeshBasicMaterial({ 
+              side: THREE.BackSide,
+              envMap: environmentMap, 
+           }),
+      )
+      const portalSceneBackground = sphere
+      
       this.group.add(
          this.squarePortal.create({
-            background: this.portalScene.background,
-            scene: this.portalScene.model,
+            background: portalSceneBackground,
             portal: {
                position: new THREE.Vector3(0, 0, -4),
                rotation: new THREE.Vector3(0, Math.PI, 0),
             }
          })
       )
-
-      /*
-      this.group.add(
-         this.squarePortal.create({
-            background: this.room.background,
-            scene: this.room.model,
-            portal: {
-               height: 8,
-               width: 8,
-               position: new THREE.Vector3(0, 0, 0),
-               rotation: new THREE.Vector3(Math.PI * -0.5, 0, 0),
-               debugColor: new THREE.Color('#ff0000'),
-            }
-         })
-      )
-      */
    }
 }
  

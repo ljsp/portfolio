@@ -63,9 +63,9 @@ export default [
         path: 'models/kitchen/kitchen.glb'
     },
     {
-        name: 'spaceShipModel',
+        name: 'workshopModel',
         type: 'gltfModel',
-        path: 'models/spaceShip/spaceShip.glb'
+        path: 'models/workshop/workshop.glb'
     },
     {
         name: 'synthwaveCityModel',

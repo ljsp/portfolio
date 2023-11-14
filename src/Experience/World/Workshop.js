@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
 
-export default class BedRoom
+export default class Workshop
 {
     constructor() 
     {
@@ -13,24 +13,23 @@ export default class BedRoom
 
         if(this.debug.active)
         {
-            this.debugFolder = this.debug.ui.addFolder('Kitchen')
+            this.debugFolder = this.debug.ui.addFolder('Workshop')
         }
 
         // Resource
-        this.resource = this.resources.items.kitchenModel
+        this.resource = this.resources.items.workshopModel
         
         this.setModel()
     }
 
     setModel() 
     {
-
-        const stencilId = 3
+        const stencilId = 2
 
         this.model = this.resource.scene
-        this.model.scale.set(1.2, 1.2, 1.2)
+        this.model.scale.set(1.0, 1.0, 1.0)
         this.model.rotation.set(0, - Math.PI / 2, 0)
-        this.model.position.set(0, -4, 0)
+        this.model.position.set(0, -4, 2)
         this.scene.add(this.model)
 
         this.model.traverse((child) =>

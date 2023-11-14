@@ -19,44 +19,61 @@ export default class PortalScene
         // Resource
         this.resource = this.resources.items.portalSceneModel
         
-        this.setBackground()
         this.setModel()
-    }
-
-    setBackground() 
-    {
-        const environmentMap = this.resources.items.spaceSunsetEnvironmentMapHDR
-
-        const sphere = new THREE.Mesh(
-            new THREE.SphereGeometry(30, 32, 32),
-            new THREE.MeshBasicMaterial({ 
-                side: THREE.BackSide,
-                envMap: environmentMap, 
-             }),
-        )
-        this.background = sphere
     }
 
     setModel() 
     {
+
+        const stencilId = 5
+
         this.backedTexture = this.resources.items.portalTexture
         this.backedTexture.flipY = false
 
         this.model = this.resource.scene
+        this.model.scale.set(4.0, 4.0, 4.0)
+        this.model.position.set(0, -4, 0)
+        this.model.rotation.set(0, Math.PI, 0)
+        this.scene.add(this.model)
 
-        const portalLightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.0 })
-        const poleLightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffe5,  transparent: true, opacity: 0.0 })
+        const portalLightMaterial = new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            stencilFuncMask: 0xff,
+            stencilWrite: true,
+            stencilFunc: THREE.EqualStencilFunc,
+            stencilZPass: THREE.KeepStencilOp,
+            stencilZFail: THREE.KeepStencilOp,
+            stencilFail: THREE.KeepStencilOp,
+            stencilRef: stencilId
+        })
+        const poleLightMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0xffffe5,
+            stencilFuncMask: 0xff,
+            stencilWrite: true,
+            stencilFunc: THREE.EqualStencilFunc,
+            stencilZPass: THREE.KeepStencilOp,
+            stencilZFail: THREE.KeepStencilOp,
+            stencilFail: THREE.KeepStencilOp,
+            stencilRef: stencilId
+        })
+
 
         this.model.traverse((child) =>
         {
-            if(child.isMesh)
+            if(child instanceof THREE.Mesh)
             {
-                child.scale.set(4, 4, 4)
-                child.position.set(0, -4, 0)
-                child.rotation.set(0, Math.PI, 0)
+                let newMaterial = child.material.clone()
+                newMaterial.stencilFuncMask = 0xff;
+                newMaterial.stencilWrite = true
+                newMaterial.stencilFunc = THREE.EqualStencilFunc
+                newMaterial.stencilZPass = THREE.KeepStencilOp
+                newMaterial.stencilZFail = THREE.KeepStencilOp
+                newMaterial.stencilFail = THREE.KeepStencilOp
+                newMaterial.stencilRef = stencilId
 
-                child.material.envMap = this.resources.items.spaceSunsetEnvironmentMap
-                child.material.map = this.backedTexture
+                newMaterial.envMap = this.resources.items.spaceSunsetEnvironmentMap
+                newMaterial.map = this.backedTexture
+                child.material = newMaterial
             }
         })
 
