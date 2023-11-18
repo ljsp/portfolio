@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import Debug from './Utils/Debug.js'
 import Sizes from './Utils/Sizes.js'
 import Time from './Utils/Time.js'
+import LoadingScreen from './LoadingScreen.js'
 import Raycaster from './Raycaster.js'
 import Points from './Utils/Point.js'
 import Camera from './Camera.js'
@@ -38,6 +39,7 @@ export default class Experience
         this.time = new Time()
         this.scene = new THREE.Scene()
         this.resources = new Resources(sources)
+        this.loadingScreen = new LoadingScreen()
         this.camera = new Camera()
         this.raycaster = new Raycaster()
         this.points = new Points();
