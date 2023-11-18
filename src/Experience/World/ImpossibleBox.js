@@ -90,7 +90,7 @@ export default class ImpossibleBox
           side: THREE.BackSide,
           color: new THREE.Color(0xf5fa6e),
           flatShading: true,
-          envMap: this.resources.items.spaceSunsetEnvironmentMap,
+          envMap: this.resources.items.spaceSunsetEnvironmentMapHDR,
       });
 
       const kitchenBackground = new THREE.Mesh(

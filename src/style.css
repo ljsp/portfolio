@@ -21,7 +21,7 @@ body
     left: 50%;
 }
 
-.point:hover .text
+.point:hover .description
 {
     opacity: 1;
 }
@@ -51,7 +51,7 @@ body
     transition: transform 0.3s ease;
 }
 
-.point .text
+.point .description
 {
     position: absolute;
     top: 40px;
