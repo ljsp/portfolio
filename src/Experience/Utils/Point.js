@@ -22,7 +22,7 @@ export default class Point {
                     position: new THREE.Vector3(1, 1, -5),
                     description: 'A small 3D model viewer made with OpenGL in C++',
                     title : 'Litho 3D',
-                    image: this.experience.resources.items.cubeFaceTexture,
+                    image: "../images/lamp-visualiser/lamp.webp",
                     content: 
                     '<p>\
                         This project showcases a compact 3D model viewer developed using OpenGL, a powerful graphics API, and C++, a highly efficient programming language. The viewer is capable of loading and rendering 3D models in real-time, offering users interactive control over the viewing angle, zoom, and lighting. Utilizing OpenGL\'s extensive functionalities, the application renders models with high precision and supports various shading and texturing techniques, making it an ideal tool for visualizing complex 3D objects.\
@@ -37,7 +37,7 @@ export default class Point {
                     position: new THREE.Vector3(1, 1, 5),
                     description: 'My personal website using Three.js',
                     title : 'Portfolio',
-                    image: this.experience.resources.items.cubeFaceTexture,
+                    image: "../images/portfolio/portfolio.webp",
                     content: 
                     '<p>\
                         Welcome to my personal website, where the centerpiece is a fascinating rendering of an "impossible cube" brought to life using the power of Three.js. This website not only showcases my skills in web development and graphics programming but also serves as a testament to the endless possibilities of 3D rendering on the web. The impossible cube, a classic optical illusion, is rendered here in stunning detail, inviting visitors to explore the intricacies of its seemingly paradoxical geometry. By leveraging Three.js, a robust JavaScript library for 3D graphics, the cube is presented in a fully interactive 3D environment, allowing users to rotate, zoom, and view it from various perspectives. This interactive experience not only captures the viewer\'s imagination but also demonstrates the dynamic and engaging web experiences that modern web technologies can create. As a developer and artist, this website reflects my passion for blending creativity with technology, constantly pushing the boundaries of what\'s possible in web-based graphics.\
@@ -49,7 +49,7 @@ export default class Point {
                     position: new THREE.Vector3(5, 1, 1),
                     description: 'A simple visualiser for the lamps I make',
                     title : 'Lamp Visualiser',
-                    image: this.experience.resources.items.cubeFaceTexture,
+                    image: "../images/lamp-visualiser/lamp.webp",
                     content: 
                     '<p>\
                         Welcome to the unique section of my personal website dedicated to the lamps I craft. This space features a simple yet elegant visualizer, designed to display the beauty and intricacy of each lamp. Utilizing intuitive web technologies, the visualizer allows visitors to explore the fine details of my handcrafted lamps in a virtual space. Users can rotate and zoom into each lamp, experiencing the textures, colors, and craftsmanship that go into every piece. This interactive tool not only highlights the aesthetic appeal of the lamps but also demonstrates the functionality and ambient lighting they provide. As an artisan, this visualizer is an extension of my commitment to quality and design, offering an immersive experience that bridges the gap between the physical art of lamp-making and the digital realm. It\'s a testament to the fusion of traditional craftsmanship with modern technology, bringing the warmth and creativity of my work to a broader audience.\
@@ -73,7 +73,6 @@ export default class Point {
                 let label = document.createElement('div')
                 label.classList.add('label')
                 label.textContent = index + 1
-
 
                 let description = document.createElement('div')
                 description.classList.add('description')
@@ -109,9 +108,18 @@ export default class Point {
             this.raycaster.setFromCamera(screenPosition, this.camera)
             const intersects = this.raycaster.intersectObjects(this.scene.children, true)
 
+            let isOutofScreen = screenPosition.x > 1 || screenPosition.x < -1 || screenPosition.y > 1 || screenPosition.y < -1
+            
             if(intersects.length === 0)
             {
-                point.element.classList.add('visible')
+                if (screenPosition.x > 1 || screenPosition.x < -1 || screenPosition.y > 1 || screenPosition.y < -1) {
+                    point.element.classList.remove('visible')
+                    point.element.classList.add('hidden')
+                }
+                else {
+                    point.element.classList.remove('hidden')
+                    point.element.classList.add('visible')
+                }
             }
             else
             {
@@ -119,13 +127,24 @@ export default class Point {
                 const pointDistance = point.position.distanceTo(this.camera.position)
                 const distanceToCenter = this.camera.position.distanceTo(new THREE.Vector3())
 
-                if(intersectionDistance < pointDistance || distanceToCenter > 11)
+                let isClosest = pointDistance < intersectionDistance
+                let isCameraCloseEnough = distanceToCenter < 11.5
+                
+                if(isClosest && isCameraCloseEnough )
                 {
-                    point.element.classList.remove('visible')
+                    if (isOutofScreen) {
+                        point.element.classList.remove('visible')
+                        point.element.classList.add('hidden')
+                    }
+                    else {
+                        point.element.classList.remove('hidden')
+                        point.element.classList.add('visible')
+                    }
                 }
                 else
                 {
-                    point.element.classList.add('visible')
+                    point.element.classList.remove('visible')
+                    point.element.classList.add('hidden')
                 }
             }
 
@@ -133,6 +152,15 @@ export default class Point {
             const translateY = - screenPosition.y * this.sizes.height * 0.5
 
             point.element.style.transform = `translate(${translateX}px, ${translateY}px)`
+
+            if (screenPosition.x > 0) {
+                let description = point.element.children[1]
+                description.style.transform = `translateX(-100%)`
+            }
+            else {
+                let description = point.element.children[1]
+                description.style.transform = `translateX(0%)`
+            }
         }
     }
 
@@ -154,6 +182,9 @@ export default class Point {
         }
         
         modalImage.src = point.image
+        modalImage.alt = point.title
+        modalImage.classList.add('w-full', 'h-full', 'object-cover', 'rounded-lg')
+        console.log(modalImage)
         
         const modalAppendedContent = document.createElement('div');
         modalAppendedContent.classList.add(
