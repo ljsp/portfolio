@@ -66,10 +66,5 @@ export default [
         name: 'workshopModel',
         type: 'gltfModel',
         path: 'models/workshop/workshop.glb'
-    },
-    {
-        name: 'synthwaveCityModel',
-        type: 'gltfModel',
-        path: 'models/synthwaveCity/synthwaveCity.glb'
     }
 ]
